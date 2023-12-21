@@ -28,6 +28,22 @@ var _ = Describe("Ezenvconfig", func() {
 	})
 
 	Context("ExtractFromEnv function", func() {
+		When("aliases are not set", func() {
+			var aliasEntry ezenvconfig.Entry
+			BeforeEach(func() {
+				aliasEntry = ezenvconfig.Entry{
+					Name: "ALIAS_ENTRY",
+				}
+			})
+
+			It("should return the correct value", func() {
+				os.Setenv("ALIAS_ENTRY", "test_value")
+				value, err := ezenvconfig.ExtractFromEnv(aliasEntry)
+				Expect(err).NotTo(HaveOccurred())
+				Expect(value).To(Equal("test_value"))
+			})
+		})
+
 		When("environment variable is set", func() {
 			BeforeEach(func() {
 				os.Setenv("TEST_ALIAS1", "test_value")

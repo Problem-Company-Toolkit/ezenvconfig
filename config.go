@@ -34,8 +34,14 @@ var (
 )
 
 func ExtractFromEnv(entry Entry) (value string, err error) {
-	for _, alias := range entry.Aliases {
-		value, ok := os.LookupEnv(alias)
+	// Combines the name and the aliases
+	// Alows you to make aliases optional
+	var envNameList []string
+	envNameList = append(envNameList, entry.Aliases...)
+	envNameList = append(envNameList, entry.Name)
+
+	for _, envName := range envNameList {
+		value, ok := os.LookupEnv(envName)
 		if !ok {
 			continue
 		}
